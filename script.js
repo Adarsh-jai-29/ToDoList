@@ -14,7 +14,7 @@ todoForm.addEventListener("submit", (e) => {
         </div>`;
   newLi.innerHTML = newLiInnerHtml;
   todoList.append(newLi);
-  todoInput.value = "";
+  // todoInput.value = "";
 });
 
 todoList.addEventListener("click", (e) => {
