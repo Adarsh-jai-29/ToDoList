@@ -39,12 +39,18 @@ a {
   justify-content: space-between;
   align-items: center;
 }
+.nav-item{
+  padding: 8px;
+}
 
 .nav-items {
   width: 40%;
   display: flex;
   list-style-type: none;
   justify-content: space-between;
+}
+.hamburger{
+  display : none !important;
 }
 .headline {
   text-align: center;
@@ -155,4 +161,19 @@ a {
   display: block;
   margin: auto;
   margin-top: 1rem;
+}
+@media (max-width: 450px) {
+  .hamburger{
+    display: block !important;
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+  .nav-position{
+    position: absolute;
+    top : 50px;
+    right: 0;
+  }
+  .nav-items li{
+    display: none;
+  }
 }
