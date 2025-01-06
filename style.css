@@ -168,12 +168,21 @@ a {
     font-size: 1.3rem;
     cursor: pointer;
   }
-  .nav-position{
+  /* .nav-position{
     position: absolute;
     top : 50px;
     right: 0;
-  }
-  .nav-items li{
+  } */
+  .nav-items{
     display: none;
+  }
+  .active{
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    top: 50px;
+    right: 20px;
+    background-color: #444;
+    transition: all 1s ease;
   }
 }

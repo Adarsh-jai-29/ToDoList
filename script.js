@@ -2,7 +2,7 @@ const todoForm = document.querySelector(".form-todo");
 const todoInput = document.querySelector(".form-todo input[type='text']");
 const todoList = document.querySelector(".todo-list");
 const hamburgerIcon = document.querySelector(".hamburger");
-const navItem = document.querySelectorAll(".nav-items li");
+const navItem = document.querySelector(".nav-items");
 
 // console.log(todoForm)
 const storedTodo = localStorage.getItem('TodoData')
@@ -70,9 +70,6 @@ todoList.addEventListener("click", (e) => {
   }
 });
 
-
-// hamburgerIcon.onclick = navItem.map(()=>{
-// navItem.style.display = "block";
-//   console.log('hi')
-//   navItem.classList.toggle("nav-position")
-// })
+hamburgerIcon.addEventListener("click", () => {
+  navItem.classList.toggle('active');
+});
