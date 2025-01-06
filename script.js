@@ -4,72 +4,67 @@ const todoList = document.querySelector(".todo-list");
 const hamburgerIcon = document.querySelector(".hamburger");
 const navItem = document.querySelector(".nav-items");
 
-// console.log(todoForm)
-const storedTodo = localStorage.getItem('TodoData')
-const storedTodoArr = storedTodo.split(',')
-// console.log(storedTodoArr)
+// Retrieve stored todos from localStorage
+let storedTodo = localStorage.getItem("TodoData");
+let userTodo = storedTodo ? JSON.parse(storedTodo) : [];
 
-const userTodo = [...storedTodoArr]
- 
-storedTodoArr && 
-storedTodoArr.map((curElem)=>{
-  const newLi = document.createElement("li");
-  const newLiInnerHtml = `
-        <span class="text">${curElem}</span>
-        <div class="todo-buttons">
-            <button class="todo-btn done">Done</button>
-            <button class="todo-btn remove">Remove</button>
-        </div>`;
-        newLi.innerHTML = newLiInnerHtml;
-        todoList.append(newLi);
- })
+// Function to render the todo list
+const renderTodos = (todos) => {
+  todoList.innerHTML = ""; // Clear the list before re-rendering
+  todos.forEach((todo) => {
+    const newLi = document.createElement("li");
+    const newLiInnerHtml = `
+      <span class="text">${todo}</span>
+      <div class="todo-buttons">
+          <button class="todo-btn done">Done</button>
+          <button class="todo-btn remove">Remove</button>
+      </div>`;
+    newLi.innerHTML = newLiInnerHtml;
+    todoList.append(newLi);
+  });
+};
 
+// Initial rendering of todos
+renderTodos(userTodo);
+
+// Add new todo
 todoForm.addEventListener("submit", (e) => {
-  if (!todoInput.value) {
+  e.preventDefault();
+  const newTodoText = todoInput.value.trim();
+
+  if (!newTodoText) {
     alert("Please enter a todo item");
     return;
   }
-  e.preventDefault();
-  const newTodoText = todoInput.value;
-  const newLi = document.createElement("li");
-  const newLiInnerHtml = `
-        <span class="text">${newTodoText}</span>
-        <div class="todo-buttons">
-            <button class="todo-btn done">Done</button>
-            <button class="todo-btn remove">Remove</button>
-        </div>`;
-        
-        newLi.innerHTML = newLiInnerHtml;
-        todoList.append(newLi);
-        userTodo.push(todoInput.value)
 
-        // storing data in localStorage
-    localStorage.setItem('TodoData',userTodo)
-    todoInput.value = "";
+  userTodo.push(newTodoText); // Update the array
+  localStorage.setItem("TodoData", JSON.stringify(userTodo)); // Save to localStorage
+  renderTodos(userTodo); // Re-render the updated list
+  todoInput.value = ""; // Clear the input field
 });
 
+// Event delegation for 'done' and 'remove' buttons
 todoList.addEventListener("click", (e) => {
-  // check if user clicked on remove button
-  if (e.target.classList.contains("remove")) {
-    const targetedLi = e.target.parentNode.parentNode;
-    targetedLi.remove();
-    const todoText = targetedLi.children[0].textContent
-    const updatedTodos = userTodo.filter((item) => item !== todoText);
+  const target = e.target;
+  const targetedLi = target.closest("li");
 
-    // Update the userTodo array and save it back to localStorage
-    localStorage.setItem('TodoData', updatedTodos);
-    userTodo.length = 0; // Clear the original array
-    userTodo.push(...updatedTodos); // Repopulate the array with the updated items
+  // Handle Remove button
+  if (target.classList.contains("remove")) {
+    const todoText = targetedLi.querySelector(".text").textContent;
+    userTodo = userTodo.filter((item) => item !== todoText); // Remove from array
+    localStorage.setItem("TodoData", JSON.stringify(userTodo)); // Update localStorage
+    renderTodos(userTodo); // Re-render
   }
-    
-  
-  // check if user clicked on done button
-  if (e.target.classList.contains("done")) {
-    const liSpan = e.target.parentNode.previousElementSibling;
-    liSpan.style.textDecoration = "line-through";
+
+  // Handle Done button
+  if (target.classList.contains("done")) {
+    const liSpan = targetedLi.querySelector(".text");
+    liSpan.style.textDecoration =
+      liSpan.style.textDecoration === "line-through" ? "none" : "line-through";
   }
 });
 
+// Hamburger menu toggle
 hamburgerIcon.addEventListener("click", () => {
-  navItem.classList.toggle('active');
+  navItem.classList.toggle("active");
 });
